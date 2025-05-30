@@ -6,372 +6,346 @@
     <title>Uttam. M - Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        /* Custom CSS for advanced animations */
+        /* Custom CSS for the blob animation */
         @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
         }
-        
+        .animate-blob {
+          animation: blob infinite; /* Applies the blob animation indefinitely */
+        }
+
+        /* Keyframes for the floating effect on content cards */
         @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-        
-        @keyframes textWave {
             0% { transform: translateY(0px); }
-            25% { transform: translateY(-5px); }
-            50% { transform: translateY(0px); }
-            75% { transform: translateY(5px); }
+            50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
         }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .animate-float {
+            animation: float 4s ease-in-out infinite; /* Subtle floating animation */
         }
-        
-        @keyframes dissolveIn {
-            0% { opacity: 0; transform: scale(0.95) translateY(20px); filter: blur(5px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+
+        /* Keyframes for the bold title dissolving effect */
+        @keyframes title-dissolve-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0px);
+                filter: blur(0px);
+            }
         }
-        
-        @keyframes slideInFromLeft {
-            0% { opacity: 0; transform: translateX(-50px); }
-            100% { opacity: 1; transform: translateX(0); }
+        .title-dissolve-in {
+            animation: title-dissolve-in 1.2s ease-out forwards; /* Apply dissolve animation */
         }
-        
-        @keyframes slideInFromRight {
-            0% { opacity: 0; transform: translateX(50px); }
-            100% { opacity: 1; transform: translateX(0); }
+
+        /* General fade-in for sections, slightly more pronounced */
+        .fade-in-section {
+          transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
         }
-        
-        @keyframes cardHover {
-            0% { transform: translateY(0) rotate(0); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-            100% { transform: translateY(-5px) rotate(1deg); box-shadow: 0 20px 25px rgba(16, 185, 129, 0.2); }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        .animate-blob { animation: blob 15s ease-in-out infinite; }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-pulse { animation: pulse 4s ease-in-out infinite; }
-        .animate-text-wave { animation: textWave 8s ease-in-out infinite; }
-        .animate-gradient { background-size: 200% 200%; animation: gradientShift 12s ease infinite; }
-        .animate-dissolve-in { animation: dissolveIn 1.5s ease-out forwards; }
-        .animate-slide-left { animation: slideInFromLeft 1s ease-out forwards; }
-        .animate-slide-right { animation: slideInFromRight 1s ease-out forwards; }
-        
-        .card-hover-effect { transition: all 0.3s ease; }
-        .card-hover-effect:hover { animation: cardHover 0.5s ease forwards; }
-        
-        .text-gradient {
-            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        .fade-in-section:not(.is-visible) {
+            opacity: 0;
+            transform: translateY(30px); /* Start further down for more dramatic effect */
         }
-        
-        .section-marker {
-            position: absolute;
-            top: -100px;
-            visibility: hidden;
-        }
-        
-        body {
-            background: linear-gradient(-45deg, #1e293b, #1e1b4b, #312e81, #1e40af);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            overflow-x: hidden;
-        }
-        
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-            transition: box-shadow 0.3s ease;
-        }
-        
-        .glow-effect:hover {
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
-        }
-        
-        .parallax-bg {
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        
-        .floating-cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(16, 185, 129, 0.7);
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: screen;
-            transform: translate(-50%, -50%);
-        }
-        
-        .cursor-follower {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid rgba(16, 185, 129, 0.5);
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease;
+
+        /* Ensure Lucide icons are styled correctly */
+        .lucide {
+            display: inline-block;
+            vertical-align: middle;
         }
     </style>
 </head>
-<body class="min-h-screen text-gray-100 font-sans relative overflow-x-hidden">
-    <!-- Floating Cursor Effects -->
-    <div class="floating-cursor" id="cursor"></div>
-    <div class="cursor-follower" id="cursor-follower"></div>
-    
-    <!-- Animated Background Blobs -->
-    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden" id="background-blobs">
-        <!-- Will be populated by JS -->
-    </div>
-    
-    <!-- Floating Particles -->
-    <div class="absolute inset-0 z-0 pointer-events-none" id="particles-js"></div>
-    
-    <!-- Header with Advanced Animations -->
-    <header id="hero" class="relative z-10 py-16 text-center bg-gray-900/70 backdrop-blur-xl shadow-2xl opacity-0">
-        <div class="container mx-auto px-4">
-            <div class="mb-8 animate-dissolve-in" style="animation-delay: 0.3s;">
-                <h1 class="text-6xl md:text-7xl font-extrabold text-white tracking-tight mb-4 text-gradient">
-                    Uttam. M
-                </h1>
-                <div class="w-24 h-2 bg-teal-400 mx-auto mb-6 rounded-full"></div>
-                <p class="text-xl md:text-2xl text-gray-300 mt-3 max-w-3xl mx-auto px-4 leading-relaxed animate-text-wave">
-                    Electrical & Electronics Engineer | Python & MATLAB Developer | Problem Solver
-                </p>
-            </div>
-            
-            <div class="flex justify-center flex-wrap gap-6 mt-8 text-lg animate-dissolve-in" style="animation-delay: 0.6s;">
-                <a href="tel:+91-6383333434" class="flex items-center px-4 py-2 bg-gray-800/50 rounded-full glow-effect hover:bg-teal-600/20 transition-all duration-300">
-                    <i data-lucide="phone" class="mr-2 lucide"></i> +91-6383333434
-                </a>
-                <a href="mailto:uttamkrishnan3578@gmail.com" class="flex items-center px-4 py-2 bg-gray-800/50 rounded-full glow-effect hover:bg-teal-600/20 transition-all duration-300">
-                    <i data-lucide="mail" class="mr-2 lucide"></i> Email
-                </a>
-                <a href="https://linkedin.com/in/uttam-krishnan" target="_blank" class="flex items-center px-4 py-2 bg-gray-800/50 rounded-full glow-effect hover:bg-teal-600/20 transition-all duration-300">
-                    <i data-lucide="linkedin" class="mr-2 lucide"></i> LinkedIn
-                </a>
-            </div>
-            
-            <div class="mt-12 animate-dissolve-in" style="animation-delay: 0.9s;">
-                <a href="#education" class="inline-block animate-float">
-                    <i data-lucide="chevrons-down" class="lucide w-10 h-10 text-teal-400"></i>
-                </a>
-            </div>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-gray-100 font-sans relative overflow-y-auto">
+
+    <div class="absolute inset-0 z-0 pointer-events-none" id="background-blobs"></div>
+
+    <header id="hero" class="relative z-10 py-12 text-center bg-gray-800/60 backdrop-blur-md shadow-xl opacity-0 transition-opacity duration-1000 ease-in-out">
+        <h1 class="text-5xl font-extrabold text-white tracking-wide">
+            Uttam. M
+        </h1>
+        <p class="text-xl text-gray-300 mt-3 max-w-2xl mx-auto px-4">
+            A budding engineer specializing in Electrical and Electronics Engineering with proficiency in basics with C, Python and MATLAB and with good interpersonal skills with an ability to solve problems in team and handle responsibility independently and looking for a position to contribute and grow in long term.
+        </p>
+        <div class="flex justify-center flex-wrap gap-x-6 gap-y-2 mt-6 text-lg">
+            <a href="tel:+91-6383333434" class="flex items-center text-gray-300 hover:text-teal-400 transition-colors duration-300">
+                <i data-lucide="phone" class="mr-2 lucide" style="width: 20px; height: 20px;"></i> +91-6383333434
+            </a>
+            <a href="mailto:uttamkrishnan3578@gmail.com" class="flex items-center text-gray-300 hover:text-teal-400 transition-colors duration-300">
+                <i data-lucide="mail" class="mr-2 lucide" style="width: 20px; height: 20px;"></i> uttamkrishnan3578@gmail.com
+            </a>
+            <a href="https://linkedin.com/in/uttam-krishnan" target="_blank" rel="noopener noreferrer" class="flex items-center text-gray-300 hover:text-teal-400 transition-colors duration-300">
+                <i data-lucide="linkedin" class="mr-2 lucide" style="width: 20px; height: 20px;"></i> LinkedIn
+            </a>
         </div>
     </header>
-    
-    <!-- Main Content Container -->
-    <main class="relative z-10 container mx-auto px-4 pb-20">
-        <!-- Section markers for scroll animations -->
-        <div id="education-marker" class="section-marker"></div>
-        
-        <!-- Education Section -->
-        <section id="education" class="relative max-w-6xl mx-auto py-12 my-12 bg-gray-900/60 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden">
-            <!-- Animated border effect -->
-            <div class="absolute inset-0 border-2 border-transparent animate-gradient" style="background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6); mask: linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff); mask-composite: exclude; padding: 2px; border-radius: inherit;"></div>
-            
-            <div class="relative z-10 px-8 py-6">
-                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-8 pb-4 border-b-2 border-teal-500/50 flex items-center section-title opacity-0 transform translate-y-10">
-                    <i data-lucide="graduation-cap" class="mr-4 lucide text-teal-400"></i> 
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">Education</span>
-                </h2>
-                
-                <!-- Education Timeline -->
-                <div class="relative pl-12 border-l-2 border-teal-400/30 space-y-12">
-                    <!-- Timeline connector decoration -->
-                    <div class="absolute left-0 top-0 h-full w-1 bg-teal-400/10 animate-pulse" style="animation-delay: 0.5s;"></div>
-                    
-                    <!-- Education Item 1 -->
-                    <div class="relative opacity-0 transform -translate-x-10 education-item">
-                        <div class="absolute -left-12 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-teal-500 shadow-lg glow-effect">
-                            <i data-lucide="book-open" class="lucide w-4 h-4 text-white"></i>
-                        </div>
-                        <div class="p-6 bg-gray-800/40 rounded-xl shadow-lg backdrop-blur-sm card-hover-effect">
-                            <h3 class="text-2xl font-bold text-white mb-2">B. Tech in Electrical and Electronics Engineering</h3>
-                            <div class="flex flex-wrap items-center gap-4 text-teal-300 mb-3">
-                                <span class="flex items-center"><i data-lucide="school" class="mr-2 lucide w-4 h-4"></i> Amrita Vishwa Vidyapeetham</span>
-                                <span class="flex items-center"><i data-lucide="map-pin" class="mr-2 lucide w-4 h-4"></i> Coimbatore</span>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-4 text-gray-400 mb-4">
-                                <span class="flex items-center"><i data-lucide="calendar" class="mr-2 lucide w-4 h-4"></i> 2022-2025 (Current)</span>
-                                <span class="flex items-center"><i data-lucide="award" class="mr-2 lucide w-4 h-4"></i> CGPA: 6.625/10</span>
-                            </div>
-                            <p class="text-gray-300 leading-relaxed">Specialized coursework in Engineering Graphics (CAD - Grade A), Power Systems, and Control Systems. Active participant in technical workshops and industry visits.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Education Item 2 -->
-                    <div class="relative opacity-0 transform -translate-x-10 education-item" style="animation-delay: 0.3s;">
-                        <div class="absolute -left-12 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 shadow-lg glow-effect">
-                            <i data-lucide="book" class="lucide w-4 h-4 text-white"></i>
-                        </div>
-                        <div class="p-6 bg-gray-800/40 rounded-xl shadow-lg backdrop-blur-sm card-hover-effect">
-                            <h3 class="text-2xl font-bold text-white mb-2">HSC (12th std)</h3>
-                            <div class="flex flex-wrap items-center gap-4 text-teal-300 mb-3">
-                                <span class="flex items-center"><i data-lucide="school" class="mr-2 lucide w-4 h-4"></i> Pushpalata Vidya Mandir</span>
-                                <span class="flex items-center"><i data-lucide="map-pin" class="mr-2 lucide w-4 h-4"></i> Tirunelveli</span>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-4 text-gray-400 mb-4">
-                                <span class="flex items-center"><i data-lucide="calendar" class="mr-2 lucide w-4 h-4"></i> 2020-2022</span>
-                                <span class="flex items-center"><i data-lucide="award" class="mr-2 lucide w-4 h-4"></i> 76.8%</span>
-                            </div>
-                            <p class="text-gray-300 leading-relaxed">Computer Science stream with focus on programming fundamentals. Developed strong analytical and problem-solving skills through coursework and projects.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Education Item 3 -->
-                    <div class="relative opacity-0 transform -translate-x-10 education-item" style="animation-delay: 0.6s;">
-                        <div class="absolute -left-12 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-purple-500 shadow-lg glow-effect">
-                            <i data-lucide="bookmark" class="lucide w-4 h-4 text-white"></i>
-                        </div>
-                        <div class="p-6 bg-gray-800/40 rounded-xl shadow-lg backdrop-blur-sm card-hover-effect">
-                            <h3 class="text-2xl font-bold text-white mb-2">SSLC (10th std)</h3>
-                            <div class="flex flex-wrap items-center gap-4 text-teal-300 mb-3">
-                                <span class="flex items-center"><i data-lucide="school" class="mr-2 lucide w-4 h-4"></i> ST. ANTONY'S PUBLIC</span>
-                                <span class="flex items-center"><i data-lucide="map-pin" class="mr-2 lucide w-4 h-4"></i> Tirunelveli</span>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-4 text-gray-400 mb-4">
-                                <span class="flex items-center"><i data-lucide="calendar" class="mr-2 lucide w-4 h-4"></i> 2018-2020</span>
-                                <span class="flex items-center"><i data-lucide="award" class="mr-2 lucide w-4 h-4"></i> 77.6%</span>
-                            </div>
-                            <p class="text-gray-300 leading-relaxed">Developed strong foundational knowledge in science and mathematics. Active participation in extracurricular activities including sports and arts.</p>
-                        </div>
-                    </div>
+
+    <main class="relative z-10 container mx-auto px-4 pb-12">
+
+        <section id="education" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="graduation-cap" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Education
+            </h2>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">B. Tech in Electrical and Electronics Engineering</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="graduation-cap" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> Amrita Vishwa Vidyapeetham, Coimbatore.</p>
+                <p class="text-gray-400 text-md mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> 2022-2025 (Current)</p>
+                <p class="text-gray-300 mt-2">Current CGPA: 6.625/10, Subjects: Engineering Graphics - CAD - Grade A</p>
+            </div>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">HSC (12th std)</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="graduation-cap" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> Pushpalata Vidya Mandir - CBSE School, Tirunelveli</p>
+                <p class="text-gray-400 text-md mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> 2020-2022</p>
+                <p class="text-gray-300 mt-2">Stream / Subjects: Computer Science, Marks (Percentage): 384/500 (76.8%)</p>
+            </div>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">SSLC (10th std)</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="graduation-cap" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> ST. ANTONY'S PUBLIC - CBSE School, Tirunelveli</p>
+                <p class="text-gray-400 text-md mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> 2018-2020</p>
+                <p class="text-gray-300 mt-2">Marks (Percentage): 388/500 (77.6%)</p>
+            </div>
+        </section>
+
+        <section id="interests" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="lightbulb" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Areas of Technical Interest
+            </h2>
+            <ul class="list-disc list-inside text-gray-300 space-y-2 content-card">
+                <li class="hover:text-white transition-colors duration-300">Battery Management System</li>
+                <li class="hover:text-white transition-colors duration-300">Cybersecurity Management and Data Analyst Engineer</li>
+                <li class="hover:text-white transition-colors duration-300">Microcontroller & Its Application</li>
+            </ul>
+        </section>
+
+        <section id="projects" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="book-open" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Projects
+            </h2>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">Temperature characteristics of a Lithium-Ion battery (in MATLAB - Simulink)</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> Sep-2024 - Nov-2024</p>
+                <p class="text-gray-300 mt-2"><strong>Objective:</strong> To determine the characteristics of the Lithium-Ion battery at different working temperatures.</p>
+                <p class="text-gray-300 mt-1"><strong>Outcomes:</strong> Displayed the Real Time Date under Different Conditions.</p>
+            </div>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">Harmonic State Space Modelling of Wireless Power Transfer System (in MATLAB)</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> Sep-2024 - Oct-2024</p>
+                <p class="text-gray-300 mt-2"><strong>Objective:</strong> To assess the HSS model's accuracy in capturing dynamics and harmonic interactions in WPT systems and highlight its advantages over traditional methods.</p>
+                <p class="text-gray-300 mt-1"><strong>Outcomes:</strong> Understood how the HSS model understands to capture system dynamics and harmonic interactions, proving to be more versatile and precise than traditional methods under various conditions.</p>
+            </div>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">Load Flow Analysis of IEEE - 9 BUS System Using NR Method (in MATLAB)</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> Sep-2024 - Oct-2024</p>
+                <p class="text-gray-300 mt-2"><strong>Objective:</strong> To explore the Newton-Raphson load flow method, compare results from manual MATLAB coding and Simulink simulations, and evaluate system stability and behavior of a 9-bus system under different conditions.</p>
+                <p class="text-gray-300 mt-1"><strong>Outcomes:</strong> Got a deeper understanding of the Newton-Raphson method, improved efficiency through analysis techniques, stability, and critical performance of a 9-bus system under various bus data and other conditions.</p>
+            </div>
+        </section>
+
+        <section id="internships" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="briefcase" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Internships & Training
+            </h2>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">BOSCH Power Solutions - Gangaikondan</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> 28-Jun-2024 - 09-Jul-2024</p>
+                <p class="text-gray-300 mt-2"><strong>Objective:</strong> To understand the driving industrial performance through innovative facility electrical management and Accelerator Pedal, Air Chamber, Accelerator Module - Design and Type, Working, Testing and Running Procedure.</p>
+                <p class="text-gray-300 mt-1"><strong>Details:</strong> Acquired knowledge about the manufacturing of different components and modules with different specifications.</p>
+            </div>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">H M Textiles Private Limited - Coimbatore</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> 23-Nov-2024 - 01-Dec-2024</p>
+                <p class="text-gray-300 mt-2"><strong>Objective:</strong> To understand about the sustainable player in textile industry to consistently deliver high quality textile products using their own Power Generation and Distribution station and understanding the usage of various electrical equipment's in the textile industry.</p>
+                <p class="text-gray-300 mt-1"><strong>Details:</strong> Acquired knowledge about the function of 110/11KV substation and the power distribution, HT equipment testing and also about the application of closed loop system, PID controls, VFD drives in the Textile industries.</p>
+            </div>
+            <div class="mb-6 p-4 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-2xl font-semibold text-white">Eaton Power Quality Pvt Ltd - Pondicherry</h3>
+                <p class="text-teal-300 text-lg mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 18px; height: 18px;"></i> 05-May-2025 - 12-May-2025</p>
+                <p class="text-gray-300 mt-2"><strong>Objective:</strong> To understand sustainable power management and electrical systems through hands-on experience at Eaton Power Quality Pvt Ltd, focusing on power generation, distribution, and industrial automation.</p>
+                <p class="text-gray-300 mt-1"><strong>Details:</strong> Worked on the manufacturing of micro data centers, relay fuses, and power components. Gained exposure to 110/11kV substation operations, HT equipment testing, and power distribution. Learned the application of PID controllers, closed-loop systems, and VFDs to improve energy efficiency and automation in industrial settings.</p>
+            </div>
+        </section>
+
+        <section id="skills" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="code" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Technical Skills
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 content-card">
+                <div>
+                    <h4 class="text-xl font-semibold text-white mb-2">Languages:</h4>
+                    <p class="hover:text-white transition-colors duration-300">C (Intermediate), Python (Intermediate), MATLAB</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-semibold text-white mb-2">Tools/Packages/Libraries:</h4>
+                    <p class="hover:text-white transition-colors duration-300">AutoCAD, ETAP, LTSpice</p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-xl font-semibold text-white mb-2">Officeware:</h4>
+                    <p class="hover:text-white transition-colors duration-300">MS Excel (Intermediate), MS PowerPoint (advanced) & MS Word (advanced).</p>
                 </div>
             </div>
         </section>
-        
-        <!-- Continue with other sections in subsequent parts -->
+
+        <section id="certificates" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="award" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Certificates & Upskilling
+            </h2>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">EV workshop</h3>
+                <p class="text-teal-300 text-md mt-1">Amrita Vishwa Vidyapeetham, conducted by BOSCH.</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> Apr-May 2023</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Crash Course Electronics and PCB Design (Online)</h3>
+                <p class="text-teal-300 text-md mt-1">Udemy</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> May-July 2024</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Programming for Everybody (Getting Started with Python)</h3>
+                <p class="text-teal-300 text-md mt-1">Coursera</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> Nov-Dec 2024</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Project Management Foundations</h3>
+                <p class="text-teal-300 text-md mt-1">LinkedIn Learning</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> Apr 2025</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Data Analytics Job Simulation</h3>
+                <p class="text-teal-300 text-md mt-1">Deloitte</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> Apr 2025</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Generative AI: Prompt Engineering Basics</h3>
+                <p class="text-teal-300 text-md mt-1">IBM</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> May 2025</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Prompt Engineering for ChatGPT</h3>
+                <p class="text-teal-300 text-md mt-1">Vanderbilt University</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> May 2025</p>
+            </div>
+            <div class="mb-4 p-3 bg-gray-800/30 rounded-lg shadow-inner hover:shadow-teal-500/30 transition-shadow duration-300 content-card">
+                <h3 class="text-xl font-semibold text-white">Open AI GPTS: Creating Your Own Custom AI Assistants</h3>
+                <p class="text-teal-300 text-md mt-1">Vanderbilt University</p>
+                <p class="text-gray-400 text-sm mt-1 flex items-center"><i data-lucide="calendar" class="mr-2 lucide" style="width: 16px; height: 16px;"></i> May 2025</p>
+            </div>
+        </section>
+
+        <section id="achievements" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="award" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Achievements
+            </h2>
+            <ul class="list-disc list-inside text-gray-300 space-y-2 content-card">
+                <li class="hover:text-white transition-colors duration-300">Runner Up in South Zone Swimming Event, Annur (2016-2017)</li>
+            </ul>
+        </section>
+
+        <section id="personal" class="fade-in-section max-w-4xl mx-auto p-6 my-8 bg-white/5 backdrop-blur-sm rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-teal-400 mb-6 border-b-2 border-teal-500 pb-2 flex items-center section-title">
+                <i data-lucide="heart" class="mr-3 lucide" style="width: 32px; height: 32px;"></i> Personal Details
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 content-card">
+                <div>
+                    <h4 class="text-xl font-semibold text-white mb-2">Date of Birth:</h4>
+                    <p class="hover:text-white transition-colors duration-300">28/11/2004</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-semibold text-white mb-2">Hobbies / Interests:</h4>
+                    <p class="hover:text-white transition-colors duration-300">Photography, Drawing, Painting, Video Editing</p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-xl font-semibold text-white mb-2">Residential Address:</h4>
+                    <p class="flex items-center hover:text-white transition-colors duration-300"><i data-lucide="map-pin" class="mr-2 lucide" style="width: 20px; height: 20px;"></i> 885-C, 2nd Main Road, TVS NAGAR, Maharaja Nagar Post, Tirunelveli, Tamil Nadu.</p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-xl font-semibold text-white mb-2">Language Proficiency:</h4>
+                    <p class="hover:text-white transition-colors duration-300">English (professional), Tamil (native), Hindi (conversational)</p>
+                </div>
+            </div>
+        </section>
     </main>
-    
+
+    <footer class="relative z-10 py-6 text-center text-gray-400 bg-gray-800/60 backdrop-blur-md shadow-xl">
+        <p>&copy; 2025 Uttam. M. All rights reserved.</p>
+    </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize Lucide icons
             lucide.createIcons();
-            
-            // Custom cursor effect
-            const cursor = document.getElementById('cursor');
-            const cursorFollower = document.getElementById('cursor-follower');
-            
-            if (cursor && cursorFollower) {
-                document.addEventListener('mousemove', (e) => {
-                    cursor.style.left = e.clientX + 'px';
-                    cursor.style.top = e.clientY + 'px';
-                    
-                    // Follower with delay
-                    setTimeout(() => {
-                        cursorFollower.style.left = e.clientX + 'px';
-                        cursorFollower.style.top = e.clientY + 'px';
-                    }, 100);
-                });
-                
-                // Cursor effects on interactive elements
-                const interactiveElements = document.querySelectorAll('a, button, .card-hover-effect, [data-cursor-effect]');
-                interactiveElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                        cursor.style.backgroundColor = 'rgba(16, 185, 129, 0.5)';
-                        cursorFollower.style.transform = 'translate(-50%, -50%) scale(0.5)';
-                        cursorFollower.style.borderColor = 'rgba(16, 185, 129, 0.8)';
+
+            // Function to handle Intersection Observer for fade-in sections and titles
+            const setupIntersectionObserver = (elements, callback, options) => {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            callback(entry.target);
+                            observer.unobserve(entry.target); // Stop observing once visible
+                        }
                     });
-                    
-                    el.addEventListener('mouseleave', () => {
-                        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                        cursor.style.backgroundColor = 'rgba(16, 185, 129, 0.7)';
-                        cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
-                        cursorFollower.style.borderColor = 'rgba(16, 185, 129, 0.5)';
-                    });
-                });
+                }, options);
+                elements.forEach(element => observer.observe(element));
+            };
+
+            // 1. Hero section fade-in
+            const heroSection = document.getElementById('hero');
+            if (heroSection) {
+                heroSection.classList.add('opacity-100');
             }
-            
-            // Generate animated background blobs
+
+            // 2. Section fade-in and title dissolve-in
+            const sections = document.querySelectorAll('.fade-in-section');
+            setupIntersectionObserver(sections, (section) => {
+                section.classList.add('is-visible'); // Trigger section fade-in
+
+                // Trigger title dissolve-in for the current section
+                const title = section.querySelector('.section-title');
+                if (title) {
+                    title.classList.add('title-dissolve-in');
+                }
+
+                // Apply floating animation to content cards within the section after a delay
+                const contentCards = section.querySelectorAll('.content-card');
+                contentCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-float');
+                    }, 500 + (index * 100)); // Stagger the floating animation
+                });
+
+            }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
+
+            // 3. Generate background blobs dynamically
             const backgroundBlobsContainer = document.getElementById('background-blobs');
             if (backgroundBlobsContainer) {
-                const colors = ['rgba(16, 185, 129, 0.1)', 'rgba(59, 130, 246, 0.1)', 'rgba(139, 92, 246, 0.1)'];
-                
-                for (let i = 0; i < 15; i++) {
+                for (let i = 0; i < 50; i++) {
                     const blob = document.createElement('div');
-                    blob.className = 'absolute rounded-full animate-blob filter blur-xl';
-                    blob.style.width = `${Math.random() * 300 + 100}px`;
-                    blob.style.height = `${Math.random() * 300 + 100}px`;
+                    blob.className = 'absolute bg-teal-500 rounded-full opacity-10 animate-blob';
+                    blob.style.width = `${Math.random() * 100 + 20}px`;
+                    blob.style.height = `${Math.random() * 100 + 20}px`;
                     blob.style.left = `${Math.random() * 100}%`;
                     blob.style.top = `${Math.random() * 100}%`;
-                    blob.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    blob.style.animationDelay = `${Math.random() * 20}s`;
-                    blob.style.animationDuration = `${Math.random() * 30 + 10}s`;
+                    blob.style.animationDelay = `${Math.random() * 10}s`;
+                    blob.style.animationDuration = `${Math.random() * 20 + 10}s`;
                     backgroundBlobsContainer.appendChild(blob);
                 }
             }
-            
-            // GSAP Scroll Animations
-            gsap.registerPlugin(ScrollTrigger);
-            
-            // Hero section fade in
-            gsap.from("#hero", {
-                opacity: 0,
-                y: 50,
-                duration: 1.5,
-                ease: "power3.out"
-            });
-            
-            // Section title animations
-            gsap.utils.toArray(".section-title").forEach((title, i) => {
-                gsap.from(title, {
-                    scrollTrigger: {
-                        trigger: title,
-                        start: "top 80%",
-                        toggleActions: "play none none none"
-                    },
-                    opacity: 0,
-                    y: 50,
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    ease: "back.out(1.7)"
-                });
-            });
-            
-            // Education items animation
-            gsap.utils.toArray(".education-item").forEach((item, i) => {
-                gsap.from(item, {
-                    scrollTrigger: {
-                        trigger: item,
-                        start: "top 90%",
-                        toggleActions: "play none none none"
-                    },
-                    opacity: 0,
-                    x: -50,
-                    duration: 0.8,
-                    delay: i * 0.15,
-                    ease: "power2.out",
-                    onComplete: () => {
-                        item.classList.add('opacity-100', 'translate-x-0');
-                    }
-                });
-            });
-            
-            // Continue with more GSAP animations in subsequent parts...
         });
     </script>
 </body>
